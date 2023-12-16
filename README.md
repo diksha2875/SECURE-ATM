@@ -12,3 +12,14 @@ This line imports the ImageTk and Image classes from the PIL (Python Imaging Lib
 3)import random:
 This line imports the random module, which provides functions for generating random numbers, shuffling sequences, and choosing random items from sequences.
 ![image](https://github.com/diksha2875/SECURE-ATM/assets/85574934/6e1e0ca0-ac8b-428c-9ba0-c615c2694dc5)
+
+Steps to Run
+Fork this Repo
+Clone that forked repo into your local system
+Install tkinter library
+Run the code
+And you are all done
+Ignore the errors and warnings, it won't bother you
+
+Correct Atm id: 2020
+Correct Pin: 6344
