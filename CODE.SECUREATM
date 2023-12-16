@@ -1,0 +1,243 @@
+from tkinter import *
+from PIL import ImageTk, Image
+import random
+
+window = Tk()
+window.title("ATM")
+window.resizable(False, False)
+
+# Field keys
+atmIdFieldKey = StringVar()
+pinFieldKey = StringVar()
+
+# Variables for fields
+atmIdText = ""
+pinText = ""
+
+# Correct id and pin
+correctAtmId = '2020'
+correctPin = '6344'
+
+# To keep track of the SCREENS
+screenNumber = 0
+
+# Number list
+normalList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+shuffledList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+
+# A global variable to use everywhere
+globalList = normalList
+
+# For creating color and number table
+class Table:
+    def _init_(self, page):
+        global globalList
+        random.shuffle(shuffledList)
+
+        if screenNumber == 1:
+            globalList = normalList
+        elif screenNumber == 2:
+            globalList = shuffledList
+
+        data = [
+            ('Red', globalList[0], img1),
+            ('Dark Green', globalList[1], img2),
+            ('Blue', globalList[2], img3),
+            ('Yellow', globalList[3], img4),
+            ('Brown', globalList[4], img5),
+            ('Orange', globalList[5], img6),
+            ('Purple', globalList[6], img7),
+            ('Grey', globalList[7], img8),
+            ('Pink', globalList[8], img9),
+            ('Light Green', globalList[9], img10)
+        ]
+
+        newFrame = Frame(page, bg='Light blue')
+        newFrame.grid(columnspan=5)
+
+        for i in range(2):
+            for j in range(10):
+                bgColor = data[j][0]
+                img = data[j][2]
+                if not i:
+                    e = Label(newFrame, height=45, width=45, image=img)
+                    e.grid(row=i, column=j)
+                else:
+                    e = Text(newFrame, height=2, width=5, fg="Black", font=('Arial', 10), padx=8)
+                    e.grid(row=1, column=j)
+                    e.insert(END, data[j][1])
+
+# Functions of ENTER button
+def pressEnter():
+    if screenNumber == 0:
+        goToPage1()
+    elif screenNumber == 1:
+        goToPage2()
+    elif screenNumber == 2:
+        goToPage3()
+    elif screenNumber == 3:
+        window.destroy()
+
+# For INTEGER buttons
+def pressButton(num):
+    global atmIdText, pinText
+    if screenNumber == 1:
+        atmIdText += str(num)
+        atmIdFieldKey.set(atmIdText)
+    elif screenNumber == 2:
+        pinText += str(num)
+        pinFieldKey.set(pinText)
+
+# For CLEAR button
+def clearAll():
+    global atmIdText, pinText
+    if screenNumber == 1:
+        atmIdText = ""
+        atmIdFieldKey.set(atmIdText)
+    elif screenNumber == 2:
+        pinText = ""
+        pinFieldKey.set(pinText)
+
+# For BACKSPACE button
+def clearOne():
+    global atmIdText, pinText
+    if screenNumber == 1:
+        atmIdText = atmIdText[:-1]
+        atmIdFieldKey.set(atmIdText)
+    elif screenNumber == 2:
+        pinText = pinText[:-1]
+        pinFieldKey.set(pinText)
+
+# Main frame
+mainFrame = Frame(window, bg='#D4D4D3')
+mainFrame.grid(columnspan=5)
+
+# Page 3
+def goToPage3():
+    global screenNumber
+    screenNumber = 3
+    FinalText = ""
+
+    if atmIdText == correctAtmId and pinText == correctPin:
+        FinalText = "Thank You"
+    else:
+        FinalText = "Failed"
+
+    page3 = LabelFrame(mainFrame, bg='Light blue')
+    page3.grid(columnspan=5, ipadx=270, ipady=110, padx=10, pady=10)
+
+    globalPagekey = page3
+
+    finalText = Label(page3, text=FinalText, font=('Courier', 20), bg='Light blue')
+    finalText.place(relx=0.5, rely=0.35, anchor='center')
+
+    def retry():
+        global atmIdText, pinText
+        page3.destroy()
+        atmIdText = ""
+        atmIdFieldKey.set(atmIdText)
+        pinText = ""
+        pinFieldKey.set(pinText)
+        goToPage1()
+
+    if atmIdText == correctAtmId and pinText == correctPin:
+        exitButton = Button(page3, text="Exit", bg='white', height=2, width=3, command=window.destroy)
+        exitButton.place(relx=0.5, rely=0.65, anchor='center')
+    else:
+        retryButton = Button(page3, text='Retry', bg='white', height=2, width=8, command=lambda: retry())
+        retryButton.place(relx=0.6, rely=0.65, anchor='center')
+
+    exitButton = Button(page3, text="Exit", bg='white', height=2, width=8, command=window.destroy)
+    exitButton.place(relx=0.6, rely=0.65, anchor='center')
+
+# Full frame for buttons
+bottomFrame = Frame(window, bg='#D4D4D3')
+bottomFrame.grid(columnspan=5, ipadx=140)
+
+# Frame for fixed buttons
+buttonsFrame = LabelFrame(bottomFrame, bg='#AAA9A8')
+buttonsFrame.grid(columnspan=5, padx=10, pady=10, sticky='')
+bottomFrame.grid_rowconfigure(0, weight=1)
+bottomFrame.grid_columnconfigure(0, weight=1)
+
+# Button shapes
+img1 = ImageTk.PhotoImage(Image.open("btn1.png"))
+img2 = ImageTk.PhotoImage(Image.open("btn2.png"))
+img3 = ImageTk.PhotoImage(Image.open("btn3.png"))
+img4 = ImageTk.PhotoImage(Image.open("btn4.png"))
+img5 = ImageTk.PhotoImage(Image.open("btn5.png"))
+img6 = ImageTk.PhotoImage(Image.open("btn6.png"))
+img7 = ImageTk.PhotoImage(Image.open("btn7.png"))
+img8 = ImageTk.PhotoImage(Image.open("btn8.png"))
+img9 = ImageTk.PhotoImage(Image.open("btn9.png"))
+img10 = ImageTk.PhotoImage(Image.open("btn10.png"))
+
+# Button functions
+def pressButton(num):
+    global atmIdText, pinText
+    if screenNumber == 1:
+        atmIdText += str(num)
+        atmIdFieldKey.set(atmIdText)
+    elif screenNumber == 2:
+        pinText += str(num)
+        pinFieldKey.set(pinText)
+
+def clearAll():
+    global atmIdText, pinText
+    if screenNumber == 
+    2:
+        pinText = ""
+        pinFieldKey.set(pinText)
+
+# Buttons
+buttons = [
+    ("1", img1), ("2", img2), ("3", img3),
+    ("4", img4), ("5", img5), ("6", img6),
+    ("7", img7), ("8", img8), ("9", img9),
+    ("0", img10)
+]
+
+row_val = 1
+col_val = 0
+
+for button_text, img in buttons:
+    button = Button(buttonsFrame, image=img, fg='Black', bg='Black', command=lambda text=button_text: pressButton(text), height=40, width=40)
+    button.grid(row=row_val, column=col_val, padx=5, pady=5)
+    col_val += 1
+    if col_val > 2:
+        col_val = 0
+        row_val += 1
+
+backspace = Button(buttonsFrame, text="BACKSPACE", fg='Black', bg='Light grey', command=clearOne, height=2, width=30)
+backspace.grid(row=1, column=3, padx=5, pady=5)
+
+clear = Button(buttonsFrame, text="CLEAR", fg='Black', bg='Light grey', command=clearAll, height=2, width=10)
+clear.grid(row=2, column=0, padx=5, pady=5)
+
+enter = Button(buttonsFrame, text="ENTER", fg='Black', bg='Light grey', command=pressEnter, height=2, width=10)
+enter.grid(row=3, column=0, padx=5, pady=5)
+
+# Additional buttons
+additional_buttons = [
+    ("F7", "FB", "DELETE"),
+    ("F8", "FS", "FID"),
+    ("F9", "FII", "FIB"),
+    ("&", "7", "8"),
+    ("9", "{", "}"),
+    ("ப", "P", "[", "]"),
+    (":", "H", "L"),
+    (":", "ENG")
+]
+
+row_val = 4
+col_val = 0
+
+for button_row in additional_buttons:
+    for button_text in button_row:
+        button = Button(buttonsFrame, text=button_text, fg='Black', bg='Light grey', height=2, width=5)
+        button.grid(row=row_val, column=col_val, padx=5, pady=5)
+        col_val += 1
+    row_val += 1
+    col_val = 0
+
+window.mainloop()
